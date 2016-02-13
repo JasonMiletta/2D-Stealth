@@ -8,8 +8,8 @@ public class WaypointMovement : MonoBehaviour
     [SerializeField]
     private float m_DampeningTime = 1.0f;
     [SerializeField]
-    private float m_RotationSpeed = 10.0f;
-    private float m_MinimumDistanceToWaypoint = 0.5f;
+    private float m_RotationSpeed = 0.10f;
+    private float m_MinimumDistanceToWaypoint = 0.05f;
     private Rigidbody2D m_RigidBody;
     private Vector3 m_Velocity = Vector3.zero;
 
@@ -61,8 +61,7 @@ public class WaypointMovement : MonoBehaviour
             }
         }
         Vector3 waypointDestination = waypointManager.waypoints[currentWaypointIndex].transform.position;
-
-        float angle = Vector3.Angle(transform.position, waypointDestination);
+        
         transform.position =  Vector3.SmoothDamp(transform.position, waypointDestination, ref m_Velocity, m_DampeningTime);
 
         transform.rotation = RotateToTarget(waypointDestination);
@@ -71,7 +70,7 @@ public class WaypointMovement : MonoBehaviour
     private Quaternion RotateToTarget(Vector3 targetVector)
     {
         Vector3 vectorToTarget = targetVector - transform.position;
-        float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
+        float angle = (Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) - 90)* Mathf.Rad2Deg;
         Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
         return Quaternion.Slerp(transform.rotation, q, Time.deltaTime * m_RotationSpeed);
     }
