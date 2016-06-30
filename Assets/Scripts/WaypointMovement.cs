@@ -6,9 +6,14 @@ public class WaypointMovement : MonoBehaviour
     public WaypointManager waypointManager;
 
     [SerializeField]
+    private float m_MaxSpeed = 10f;
+    [SerializeField]
     private float m_DampeningTime = 1.0f;
     [SerializeField]
-    private float m_RotationSpeed = 0.10f;
+    private float m_RotationSpeed = 10f;
+    [SerializeField]
+    private EnemyCharacter m_self;
+
     private float m_MinimumDistanceToWaypoint = 0.05f;
     private Rigidbody2D m_RigidBody;
     private Vector3 m_Velocity = Vector3.zero;
@@ -19,6 +24,7 @@ public class WaypointMovement : MonoBehaviour
 
     void Awake()
     {
+        m_self = GetComponent<EnemyCharacter>();
         m_RigidBody = GetComponent<Rigidbody2D>();
     }
 
@@ -39,6 +45,8 @@ public class WaypointMovement : MonoBehaviour
 
     private void MoveToNextWaypoint()
     {
+
+        Vector3 waypointDestination = waypointManager.waypoints[currentWaypointIndex].transform.position;
         //Check if we reached the current destination, if so, point towards the next destination
         if (Vector3.Distance(transform.position, waypointManager.waypoints[currentWaypointIndex].transform.position) < m_MinimumDistanceToWaypoint)
         {
@@ -59,20 +67,27 @@ public class WaypointMovement : MonoBehaviour
             {
                 --currentWaypointIndex;
             }
+            waypointDestination = waypointManager.waypoints[currentWaypointIndex].transform.position;
         }
-        Vector3 waypointDestination = waypointManager.waypoints[currentWaypointIndex].transform.position;
-        
-        transform.position =  Vector3.SmoothDamp(transform.position, waypointDestination, ref m_Velocity, m_DampeningTime);
 
-        transform.rotation = RotateToTarget(waypointDestination);
+        //Rotate
+        transform.rotation = Quaternion.Slerp(transform.rotation, RotateToTarget(waypointDestination), 20 * Time.deltaTime);
+        //Move
+        Move(waypointDestination);
+    }
+
+    private void Move(Vector3 targetWaypoint)
+    {
+        // Move the character
+        transform.position = Vector3.SmoothDamp(transform.position, targetWaypoint, ref m_Velocity, m_DampeningTime);
     }
 
     private Quaternion RotateToTarget(Vector3 targetVector)
     {
-        Vector3 vectorToTarget = targetVector - transform.position;
-        float angle = (Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) - 90)* Mathf.Rad2Deg;
-        Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
-        return Quaternion.Slerp(transform.rotation, q, Time.deltaTime * m_RotationSpeed);
+        var vectorToTarget = targetVector - transform.position;
+        var angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
+        return Quaternion.AngleAxis(angle, Vector3.forward);
+        //return Quaternion.RotateTowards(transform.rotation, q, m_RotationSpeed);
     }
 }
 

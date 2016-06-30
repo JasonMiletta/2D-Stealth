@@ -3,8 +3,13 @@ using System.Collections;
 
 public class EnemyCharacter : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
+    private void Awake()
+    {
+
+    }
+
+    // Use this for initialization
+    void Start () {
 	
 	}
 	
@@ -12,9 +17,4 @@ public class EnemyCharacter : MonoBehaviour {
 	void Update () {
 	
 	}
-
-    void FixedUpdate()
-    {
-
-    }
 }
