@@ -13,6 +13,8 @@ public class WaypointMovement : MonoBehaviour
     private float m_RotationSpeed = 10f;
     [SerializeField]
     private EnemyCharacter m_self;
+    [SerializeField]
+    private bool loop = false;
 
     private float m_MinimumDistanceToWaypoint = 0.05f;
     private Rigidbody2D m_RigidBody;
@@ -45,30 +47,7 @@ public class WaypointMovement : MonoBehaviour
 
     private void MoveToNextWaypoint()
     {
-
-        Vector3 waypointDestination = waypointManager.waypoints[currentWaypointIndex].transform.position;
-        //Check if we reached the current destination, if so, point towards the next destination
-        if (Vector3.Distance(transform.position, waypointManager.waypoints[currentWaypointIndex].transform.position) < m_MinimumDistanceToWaypoint)
-        {
-            if (currentWaypointIndex == maxWaypointIndex)
-            {
-                reversing = true;
-            }
-            else if (currentWaypointIndex == 0)
-            {
-                reversing = false;
-            }
-
-            if (!reversing)
-            {
-                ++currentWaypointIndex;
-            }
-            else
-            {
-                --currentWaypointIndex;
-            }
-            waypointDestination = waypointManager.waypoints[currentWaypointIndex].transform.position;
-        }
+        Vector3 waypointDestination = SetWaypointDestination();
 
         //Rotate
         transform.rotation = Quaternion.Slerp(transform.rotation, RotateToTarget(waypointDestination), 20 * Time.deltaTime);
@@ -88,6 +67,49 @@ public class WaypointMovement : MonoBehaviour
         var angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
         return Quaternion.AngleAxis(angle, Vector3.forward);
         //return Quaternion.RotateTowards(transform.rotation, q, m_RotationSpeed);
+    }
+
+    private Vector3 SetWaypointDestination()
+    {
+        //Check if we reached the current destination, if so, point towards the next destination
+        if (Vector3.Distance(transform.position, waypointManager.waypoints[currentWaypointIndex].transform.position) < m_MinimumDistanceToWaypoint)
+        {
+            if (loop)
+            {
+                if(currentWaypointIndex == maxWaypointIndex)
+                {
+                    currentWaypointIndex = 0;
+                }
+                else
+                {
+                    ++currentWaypointIndex;
+                }
+            }
+            else
+            {
+                if(currentWaypointIndex == maxWaypointIndex)
+                {
+                    reversing = true;
+                } 
+                //was reversing and now we need to go back
+                else if (currentWaypointIndex == 0)
+                {
+                    reversing = false;
+                }
+
+                if (!reversing)
+                {
+                    ++currentWaypointIndex;
+                }
+                else
+                {
+                    --currentWaypointIndex;
+                }
+            }
+        }
+
+        Vector3 waypointDestination = waypointManager.waypoints[currentWaypointIndex].transform.position;
+        return waypointDestination;
     }
 }
 
