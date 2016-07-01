@@ -64,7 +64,7 @@ public class WaypointMovement : MonoBehaviour
     private Quaternion RotateToTarget(Vector3 targetVector)
     {
         var vectorToTarget = targetVector - transform.position;
-        var angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
+        var angle = (Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg) - 90 ;
         return Quaternion.AngleAxis(angle, Vector3.forward);
         //return Quaternion.RotateTowards(transform.rotation, q, m_RotationSpeed);
     }

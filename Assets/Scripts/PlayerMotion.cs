@@ -9,6 +9,9 @@ public class PlayerMotion : MonoBehaviour {
     private Rigidbody2D m_RigidBody;
     [SerializeField]
     private float m_MaxSpeed = 10f;
+    public float m_TurnSpeed = 180f;
+
+    private float m_TurnInputValue;
 
     // Use this for initialization
     void Start () {
@@ -23,14 +26,22 @@ public class PlayerMotion : MonoBehaviour {
 
     void FixedUpdate()
     {
-        float horizontalMovement = Input.GetAxis("Horizontal");
-        float verticalMovement = Input.GetAxis("Vertical");
-        Move(horizontalMovement, verticalMovement);
+        Move();
+        Look();
     }
 
-    public void Move(float horizontal, float vertical)
+    public void Move()
     {
+        float horizontalMovement = Input.GetAxis("Horizontal");
+        float verticalMovement = Input.GetAxis("Vertical");
+
         // Move the character
-        m_RigidBody.velocity = new Vector2(horizontal * m_MaxSpeed, vertical * m_MaxSpeed);
+        m_RigidBody.velocity = new Vector2(horizontalMovement * m_MaxSpeed, verticalMovement * m_MaxSpeed);
+    }
+
+    private void Look()
+    {
+        Vector3 mousePoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        transform.rotation = Quaternion.LookRotation(Vector3.forward, mousePoint - transform.position);
     }
 }
