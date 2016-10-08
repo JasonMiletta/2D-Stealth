@@ -15,6 +15,5 @@ public class EnemyCharacter : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
 	}
 }
