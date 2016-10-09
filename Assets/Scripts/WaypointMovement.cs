@@ -19,6 +19,7 @@ public class WaypointMovement : MonoBehaviour
     private float m_MinimumDistanceToWaypoint = 0.05f;
     private Rigidbody2D m_RigidBody;
     private Vector3 m_Velocity = Vector3.zero;
+    private float lastSqrMagnitude = Mathf.Infinity;
 
     private int currentWaypointIndex = 0;
     private int maxWaypointIndex;
@@ -57,8 +58,19 @@ public class WaypointMovement : MonoBehaviour
 
     private void Move(Vector3 targetWaypoint)
     {
+
+        var currentSqrMagnitude = (targetWaypoint - transform.position).sqrMagnitude;
+        /*if(currentSqrMagnitude > lastSqrMagnitude)
+        {
+            //tr= Vector3.zero;
+        }
+        else
+        }
+        */
+        lastSqrMagnitude = currentSqrMagnitude;
         // Move the character
         transform.position = Vector3.SmoothDamp(transform.position, targetWaypoint, ref m_Velocity, m_DampeningTime);
+        
     }
 
     private Quaternion RotateToTarget(Vector3 targetVector)
