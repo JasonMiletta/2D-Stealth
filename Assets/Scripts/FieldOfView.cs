@@ -1,8 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts;
 
 public class FieldOfView : MonoBehaviour {
+
+    [SerializeField]
+    private WaypointMovement m_waypointMovement;
 
     public float viewRadius;
     [Range(0, 360)]
@@ -22,10 +26,12 @@ public class FieldOfView : MonoBehaviour {
     Mesh viewMesh;
 
     public List<Transform> visibleTargets = new List<Transform>();
-    
+    public float maxSpeed = 10.0f;
 
     void Start()
     {
+        m_waypointMovement = GetComponent<WaypointMovement>();
+
         viewMesh = new Mesh();
         viewMesh.name = "View Mesh";
         viewMeshFilter.mesh = viewMesh;
@@ -36,6 +42,15 @@ public class FieldOfView : MonoBehaviour {
     void LateUpdate()
     {
         drawFieldOfView();
+        if(visibleTargets.Count > 0)
+        {
+            m_waypointMovement.targetSighted = true;
+            transform.rotation = Quaternion.Slerp(transform.rotation, Utils.RotateToTarget(transform.position, visibleTargets[0].position), 20 * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, visibleTargets[0].position, Time.deltaTime * maxSpeed);
+        } else
+        {
+            m_waypointMovement.targetSighted = false;
+        }
     }
 
     IEnumerator findTargetWithDelay(float delay)

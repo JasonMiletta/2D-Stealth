@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Assets.Scripts;
 
 public class WaypointMovement : MonoBehaviour
 {
     public WaypointManager waypointManager;
+
+    public bool targetSighted = false;
 
     [SerializeField]
     private float m_MaxSpeed = 10f;
@@ -25,10 +28,12 @@ public class WaypointMovement : MonoBehaviour
     private int maxWaypointIndex;
     private bool reversing = false;
 
+
     void Awake()
     {
         m_self = GetComponent<EnemyCharacter>();
         m_RigidBody = GetComponent<Rigidbody2D>();
+
     }
 
     void Start()
@@ -43,15 +48,18 @@ public class WaypointMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        MoveToNextWaypoint();
+        if (!targetSighted)
+        {
+            MoveToNextWaypoint();
+        }
     }
-
+   
     private void MoveToNextWaypoint()
     {
         Vector3 waypointDestination = SetWaypointDestination();
 
         //Rotate
-        transform.rotation = Quaternion.Slerp(transform.rotation, RotateToTarget(waypointDestination), 20 * Time.deltaTime);
+        transform.rotation = Quaternion.Slerp(transform.rotation, Utils.RotateToTarget(transform.position, waypointDestination), 20 * Time.deltaTime);
         //Move
         Move(waypointDestination);
     }
@@ -69,16 +77,9 @@ public class WaypointMovement : MonoBehaviour
         */
         lastSqrMagnitude = currentSqrMagnitude;
         // Move the character
-        transform.position = Vector3.SmoothDamp(transform.position, targetWaypoint, ref m_Velocity, m_DampeningTime);
+        //transform.position = Vector3.SmoothDamp(transform.position, targetWaypoint, ref m_Velocity, m_DampeningTime);
+        transform.position = Vector3.Lerp(transform.position, targetWaypoint, Time.deltaTime);
         
-    }
-
-    private Quaternion RotateToTarget(Vector3 targetVector)
-    {
-        var vectorToTarget = targetVector - transform.position;
-        var angle = (Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg) - 90 ;
-        return Quaternion.AngleAxis(angle, Vector3.forward);
-        //return Quaternion.RotateTowards(transform.rotation, q, m_RotationSpeed);
     }
 
     private Vector3 SetWaypointDestination()
