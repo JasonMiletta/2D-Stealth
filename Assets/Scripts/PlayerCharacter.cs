@@ -4,16 +4,18 @@ using System.Collections;
 public class PlayerCharacter : MonoBehaviour {
 
     public GameObject pauseMenu;
+    public int health = 1;
+
     private bool isEnabled = false;
 
     private void Awake()
     {
     }
 
-	// Use this for initialization
-	void Start () {
-	
-	}
+    // Use this for initialization
+    void Start() {
+
+    }
 
     void Update()
     {
@@ -31,6 +33,15 @@ public class PlayerCharacter : MonoBehaviour {
             Time.timeScale = 1;
             pauseMenu.SetActive(false);
             isEnabled = false;
+        }
+    }
+
+    void ApplyDamage(int damageValue)
+    {
+        health -= damageValue;
+        if(health <= 0)
+        {
+            Destroy(gameObject);
         }
     }
 }

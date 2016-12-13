@@ -12,7 +12,8 @@ public class GameManager : MonoBehaviour
 
     private int m_RoundNumber;                  // Which round the game is currently on.
     private WaitForSeconds m_StartWait;         // Used to have a delay whilst the round starts.
-    private WaitForSeconds m_EndWait;           // Used to have a delay whilst the round or game ends.
+    private WaitForSeconds m_EndWait;           // Used to have a delay whilst the round or game ends
+    private bool exitGoalReached;
 
     private void Start()
     {
@@ -42,6 +43,10 @@ public class GameManager : MonoBehaviour
             // If there is a game winner, restart the level.
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
+        else if (exitGoalReached)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
         else
         {
             // If there isn't a winner yet, restart this coroutine so the loop continues.
@@ -68,7 +73,7 @@ public class GameManager : MonoBehaviour
         m_MessageText.text = string.Empty;
 
         // While there is not one tank left...
-        while (!isGameOver())
+        while (!isGameOver() && !exitGoalReached)
         {
             // ... return on the next frame.
             yield return null;
@@ -88,14 +93,24 @@ public class GameManager : MonoBehaviour
    
     private bool isGameOver()
     {
-        return (!player.isActiveAndEnabled);
+        return (!player || !player.isActiveAndEnabled);
     }
     
+    public void setExitGoalReached()
+    {
+        exitGoalReached = true;
+    }
 
     // Returns a string message to display at the end of each round.
     private string EndMessage()
     {
-        string message = "Game Over!";
-        return message;
+        if (isGameOver())
+        {
+            return "Game Over!";
+        } else if (exitGoalReached)
+        {
+            return "GOAL!";
+        }
+        return "";
     }
 }
