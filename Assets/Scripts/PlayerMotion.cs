@@ -26,11 +26,19 @@ public class PlayerMotion : MonoBehaviour {
 
     void FixedUpdate()
     {
-        Move();
+        if (!m_playerCharacter.isFrozen)
+        {
+            Move();
+        }
         Look();
     }
 
-    public void Move()
+    public void stopMovement()
+    {
+        m_RigidBody.velocity = Vector2.zero;
+    }
+
+    private void Move()
     {
         float horizontalMovement = Input.GetAxis("Horizontal");
         float verticalMovement = Input.GetAxis("Vertical");

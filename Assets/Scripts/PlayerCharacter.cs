@@ -4,9 +4,11 @@ using System.Collections;
 public class PlayerCharacter : MonoBehaviour {
 
     public GameObject pauseMenu;
+    public PlayerMotion motion;
     public int health = 1;
 
-    private bool isEnabled = false;
+    private bool isPaused = false;
+    public bool isFrozen{ get; protected set; }
 
     private void Awake()
     {
@@ -14,29 +16,36 @@ public class PlayerCharacter : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-
+        motion = GetComponent<PlayerMotion>();
+        isFrozen = false;
     }
 
     void Update()
     {
         // Enable pause menu
-        if (Input.GetKeyDown(KeyCode.Escape) && !isEnabled)
+        if (Input.GetKeyDown(KeyCode.Escape) && !isPaused)
         {
             Time.timeScale = 0;
             pauseMenu.SetActive(true);
-            isEnabled = true;
+            isPaused = true;
         }
 
         // disable pause menu
-        else if (Input.GetKeyDown(KeyCode.Escape) && isEnabled)
+        else if (Input.GetKeyDown(KeyCode.Escape) && isPaused)
         {
             Time.timeScale = 1;
             pauseMenu.SetActive(false);
-            isEnabled = false;
+            isPaused = false;
         }
     }
 
-    void ApplyDamage(int damageValue)
+    public void freezePlayer()
+    {
+        isFrozen = true;
+        motion.stopMovement();
+    }
+
+    private void ApplyDamage(int damageValue)
     {
         health -= damageValue;
         if(health <= 0)

@@ -14,10 +14,9 @@ public class ExitGoal : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
-	}
+    }
 
-    void onTriggerEnter2D(Collider2D coll)
+    void OnTriggerEnter2D(Collider2D coll)
     {
         Debug.Log("trigger enter");
         gameManager.setExitGoalReached();

@@ -99,6 +99,7 @@ public class GameManager : MonoBehaviour
     public void setExitGoalReached()
     {
         exitGoalReached = true;
+        player.freezePlayer();
     }
 
     // Returns a string message to display at the end of each round.
