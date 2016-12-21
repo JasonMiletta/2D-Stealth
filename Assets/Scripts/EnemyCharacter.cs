@@ -3,6 +3,8 @@ using System.Collections;
 
 public class EnemyCharacter : MonoBehaviour {
 
+    public bool targetSighted;
+
     private void Awake()
     {
 
@@ -15,5 +17,6 @@ public class EnemyCharacter : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
 	}
 }

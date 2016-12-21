@@ -120,7 +120,7 @@ public class WaypointMovement : MonoBehaviour
                 }
             }
         }
-
+        
         Vector3 waypointDestination = waypointManager.waypoints[currentWaypointIndex].transform.position;
         return waypointDestination;
     }

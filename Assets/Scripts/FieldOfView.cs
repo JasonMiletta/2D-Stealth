@@ -5,9 +5,6 @@ using Assets.Scripts;
 
 public class FieldOfView : MonoBehaviour {
 
-    [SerializeField]
-    private WaypointMovement m_waypointMovement;
-
     public float viewRadius;
     [Range(0, 360)]
     public float viewAngle;
@@ -28,6 +25,8 @@ public class FieldOfView : MonoBehaviour {
     public List<Transform> visibleTargets = new List<Transform>();
     public float maxSpeed = 10.0f;
 
+    private WaypointMovement m_waypointMovement;
+
     void Start()
     {
         m_waypointMovement = GetComponent<WaypointMovement>();
@@ -45,10 +44,15 @@ public class FieldOfView : MonoBehaviour {
         if(visibleTargets.Count > 0)
         {
             m_waypointMovement.targetSighted = true;
+            EventManager.TriggerEvent("playerSpotted");
             transform.rotation = Quaternion.Slerp(transform.rotation, Utils.RotateToTarget(transform.position, visibleTargets[0].position), 20 * Time.deltaTime);
             transform.position = Vector3.MoveTowards(transform.position, visibleTargets[0].position, Time.deltaTime * maxSpeed);
         } else
         {
+            if (m_waypointMovement.targetSighted)
+            {
+                EventManager.TriggerEvent("playerLost");
+            }
             m_waypointMovement.targetSighted = false;
         }
     }
