@@ -6,13 +6,13 @@ public class StealthStatusManager : MonoBehaviour
 {
     public Text m_StealthStatusText;            // Reference to the Status text on the HUD
 
-    private void onEnable()
+    private void OnEnable()
     {
         EventManager.StartListening("playerSpotted", playerSpotted);
         EventManager.StartListening("playerLost", playerLost);
     }
 
-    private void onDisable()
+    private void OnDisable()
     {
         EventManager.StopListening("playerSpotted", playerSpotted);
         EventManager.StopListening("playerLost", playerLost);
