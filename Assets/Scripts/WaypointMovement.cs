@@ -48,7 +48,7 @@ public class WaypointMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!targetSighted)
+        if (!targetSighted && maxWaypointIndex > 0)
         {
             MoveToNextWaypoint();
         }
@@ -85,8 +85,6 @@ public class WaypointMovement : MonoBehaviour
     private Vector3 SetWaypointDestination()
     {
         //Check if we reached the current destination, if so, point towards the next destination
-        Debug.Log(waypointManager.waypoints);
-        Debug.Log(currentWaypointIndex);
         if (Vector3.Distance(transform.position, waypointManager.waypoints[currentWaypointIndex].transform.position) < m_MinimumDistanceToWaypoint)
         {
             if (loop)

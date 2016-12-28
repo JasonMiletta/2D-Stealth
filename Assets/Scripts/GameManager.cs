@@ -9,8 +9,6 @@ public class GameManager : MonoBehaviour
     public float m_EndDelay = 3f;               // The delay between the end of RoundPlaying and RoundEnding phases..
     public Text m_MessageText;                  // Reference to the overlay Text to display winning text, etc.
     public PlayerCharacter player;              // Reference to the current player
-    public bool isPlayerDetected;
-    public Text m_StealthStatusText;            // Reference to the Status text on the HUD
 
     private int m_RoundNumber;                  // Which round the game is currently on.
     private WaitForSeconds m_StartWait;         // Used to have a delay whilst the round starts.
@@ -25,18 +23,6 @@ public class GameManager : MonoBehaviour
 
         // Once the tanks have been created and the camera is using them as targets, start the game.
         StartCoroutine(GameLoop());
-    }
-
-    private void onEnable()
-    {
-        EventManager.StartListening("playerSpotted", playerSpotted);
-        EventManager.StartListening("playerLost", playerLost);
-    }
-
-    private void onDisable()
-    {
-        EventManager.StopListening("playerSpotted", playerSpotted);
-        EventManager.StopListening("playerLost", playerLost);
     }
 
     // This is called from start and will run each phase of the game one after another.
@@ -127,17 +113,5 @@ public class GameManager : MonoBehaviour
             return "GOAL!";
         }
         return "";
-    }
-
-    private void playerSpotted()
-    {
-        Debug.Log("player spotted");
-        m_StealthStatusText.text = "Spotted!";
-    }
-
-    private void playerLost()
-    {
-        Debug.Log("player lost");
-        m_StealthStatusText.text = "Hidden...";
     }
 }
