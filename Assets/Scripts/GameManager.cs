@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public float m_EndDelay = 3f;               // The delay between the end of RoundPlaying and RoundEnding phases..
     public Text m_MessageText;                  // Reference to the overlay Text to display winning text, etc.
     public PlayerCharacter player;              // Reference to the current player
+    public string nextLevelSceneName;
 
     private int m_RoundNumber;                  // Which round the game is currently on.
     private WaitForSeconds m_StartWait;         // Used to have a delay whilst the round starts.
@@ -41,11 +42,23 @@ public class GameManager : MonoBehaviour
         if (isGameOver())
         {
             // If there is a game winner, restart the level.
-            SceneManager.LoadScene("Main Menu");
+            if (nextLevelSceneName != null || nextLevelSceneName != "")
+            {
+                SceneManager.LoadScene(nextLevelSceneName);
+            } else
+            {
+                SceneManager.LoadScene("Main Menu");
+            }
         }
         else if (exitGoalReached)
         {
-            SceneManager.LoadScene("Main Menu");
+            if (nextLevelSceneName != null || nextLevelSceneName != "")
+            {
+                SceneManager.LoadScene(nextLevelSceneName);
+            } else
+            {
+                SceneManager.LoadScene("Main Menu");
+            }
         }
         else
         {
