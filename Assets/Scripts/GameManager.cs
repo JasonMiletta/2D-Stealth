@@ -41,11 +41,11 @@ public class GameManager : MonoBehaviour
         if (isGameOver())
         {
             // If there is a game winner, restart the level.
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            SceneManager.LoadScene("Main Menu");
         }
         else if (exitGoalReached)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            SceneManager.LoadScene("Main Menu");
         }
         else
         {
