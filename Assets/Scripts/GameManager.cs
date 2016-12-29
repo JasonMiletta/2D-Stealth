@@ -42,9 +42,9 @@ public class GameManager : MonoBehaviour
         if (isGameOver())
         {
             // If there is a game winner, restart the level.
-            if (nextLevelSceneName != null || nextLevelSceneName != "")
+            if (nextLevelSceneName != null && nextLevelSceneName != "")
             {
-                SceneManager.LoadScene(nextLevelSceneName);
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             } else
             {
                 SceneManager.LoadScene("Main Menu");
@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
         }
         else if (exitGoalReached)
         {
-            if (nextLevelSceneName != null || nextLevelSceneName != "")
+            if (nextLevelSceneName != null && nextLevelSceneName != "")
             {
                 SceneManager.LoadScene(nextLevelSceneName);
             } else

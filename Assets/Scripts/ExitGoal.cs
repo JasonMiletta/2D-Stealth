@@ -18,7 +18,6 @@ public class ExitGoal : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D coll)
     {
-        Debug.Log("trigger enter");
         gameManager.setExitGoalReached();
     }
 }
