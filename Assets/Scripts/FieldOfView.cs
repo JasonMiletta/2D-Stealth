@@ -5,6 +5,8 @@ using Assets.Scripts;
 
 public class FieldOfView : MonoBehaviour {
 
+    public GameObject alertBang;
+
     public float viewRadius;
     [Range(0, 360)]
     public float viewAngle;
@@ -44,6 +46,7 @@ public class FieldOfView : MonoBehaviour {
         if(visibleTargets.Count > 0)
         {
             m_waypointMovement.targetSighted = true;
+            alertBang.GetComponent<MeshRenderer>().enabled = true;
             EventManager.TriggerEvent("playerSpotted");
             transform.rotation = Quaternion.Slerp(transform.rotation, Utils.RotateToTarget(transform.position, visibleTargets[0].position), 20 * Time.deltaTime);
             transform.position = Vector3.MoveTowards(transform.position, visibleTargets[0].position, Time.deltaTime * maxSpeed);
@@ -51,6 +54,7 @@ public class FieldOfView : MonoBehaviour {
         {
             if (m_waypointMovement.targetSighted)
             {
+                alertBang.GetComponent<MeshRenderer>().enabled = false;
                 EventManager.TriggerEvent("playerLost");
             }
             m_waypointMovement.targetSighted = false;

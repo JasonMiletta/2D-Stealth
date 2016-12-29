@@ -29,14 +29,12 @@ public class StealthStatusManager : MonoBehaviour
 
     private void playerSpotted()
     {
-        Debug.Log("player spotted");
         m_StealthStatusText.text = "Spotted!";
         m_StealthStatusText.color = Color.red;
     }
 
     private void playerLost()
     {
-        Debug.Log("player lost");
         m_StealthStatusText.text = "Hidden...";
         m_StealthStatusText.color = Color.green;
     }
