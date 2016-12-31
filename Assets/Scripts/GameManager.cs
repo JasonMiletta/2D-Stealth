@@ -106,7 +106,7 @@ public class GameManager : MonoBehaviour
    
     private bool isGameOver()
     {
-        return (!player || !player.isActiveAndEnabled);
+        return (!exitGoalReached && (!player || !player.isActiveAndEnabled));
     }
     
     public void setExitGoalReached()

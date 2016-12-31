@@ -21,7 +21,7 @@ public class PlayerMotion : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+        m_RigidBody.transform.position = m_RigidBody.position + (new Vector2(0.0f, 0.0f)) * (Time.time - Time.deltaTime);
 	}
 
     void FixedUpdate()

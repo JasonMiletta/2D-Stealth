@@ -48,8 +48,11 @@ public class FieldOfView : MonoBehaviour {
             m_waypointMovement.targetSighted = true;
             alertBang.GetComponent<MeshRenderer>().enabled = true;
             EventManager.TriggerEvent("playerSpotted");
-            transform.rotation = Quaternion.Slerp(transform.rotation, Utils.RotateToTarget(transform.position, visibleTargets[0].position), 20 * Time.deltaTime);
-            transform.position = Vector3.MoveTowards(transform.position, visibleTargets[0].position, Time.deltaTime * maxSpeed);
+            if (visibleTargets[0] != null)
+            {
+                transform.rotation = Quaternion.Slerp(transform.rotation, Utils.RotateToTarget(transform.position, visibleTargets[0].position), 20 * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, visibleTargets[0].position, Time.deltaTime * maxSpeed);
+            }
         } else
         {
             if (m_waypointMovement.targetSighted)
@@ -98,10 +101,12 @@ public class FieldOfView : MonoBehaviour {
         {
             Renderer renderer = viewMeshFilter.GetComponent<Renderer>();
             renderer.material = detectedMaterial;
+            renderer.sortingLayerName = "Default";
         } else
         {
             Renderer renderer = viewMeshFilter.GetComponent<Renderer>();
             renderer.material = defaultMaterial;
+            renderer.sortingLayerName = "Default";
         }
 
         int rayCount = Mathf.RoundToInt(viewAngle * meshResolution);
